@@ -8,6 +8,7 @@ package com.example.services;
 import com.example.PersistenceManager;
 import com.example.models.Competitor;
 import com.example.models.CompetitorDTO;
+import com.example.models.CompetitorLog;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -20,6 +21,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 /**
@@ -59,6 +61,7 @@ public class CompetitorService {
         Competitor competitorTmp = new Competitor();
         competitorTmp.setAddress(competitor.getAddress());
         competitorTmp.setAge(competitor.getAge());
+        competitorTmp.setPassword(competitor.getPassword());
         competitorTmp.setCellphone(competitor.getCellphone());
         competitorTmp.setCity(competitor.getCity());
         competitorTmp.setCountry(competitor.getCountry());
@@ -84,5 +87,23 @@ public class CompetitorService {
         return Response.status(200).header("Access-Control-Allow-Origin",
                 "*").entity(rta).build();
     }
-
+    
+    @POST
+    @Path("/log-in")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loginCompetitor(CompetitorLog log_in) throws JSONException {
+        entityManager.getTransaction().begin();
+        Query q = entityManager.createQuery("select u from Competitor u "
+                + "where u.address = \"" + log_in.getAddress() + "\" and "
+                + "u.password = \"" + log_in.getPassword() + "\"");
+            
+        try{
+            Competitor competitorTmp = (Competitor) q.getSingleResult();
+            return Response.status(200).header("Access-Control-Allow-Origin",
+                    "*").entity(competitorTmp).build();
+        }catch(Exception e){
+        
+            return Response.status(300).entity("NotAuthorizedException").type("text/plain").build();
+        }
+    }
 }

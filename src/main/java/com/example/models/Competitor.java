@@ -41,6 +41,7 @@ public class Competitor implements Serializable {
     private String name;
     private String surname;
     private int age;
+    private String password;
     private String telephone;
     private String cellphone;
     private String address;
@@ -51,10 +52,11 @@ public class Competitor implements Serializable {
     public Competitor() {
     }
 
-    public Competitor(String nameN, String surnameN, int ageN, String telephoneN, String cellphoneN, String addressN, String cityN, String countryN, boolean winnerN) {
+    public Competitor(String nameN, String surnameN, int ageN, String passwordN, String telephoneN, String cellphoneN, String addressN, String cityN, String countryN, boolean winnerN) {
         name = nameN;
         surname = surnameN;
         age = ageN;
+        password = passwordN;
         telephone = telephoneN;
         cellphone = cellphoneN;
         address = addressN;
@@ -73,6 +75,14 @@ public class Competitor implements Serializable {
         this.createdAt = this.updatedAt = Calendar.getInstance();
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
     public Long getId() {
         return id;
     }
